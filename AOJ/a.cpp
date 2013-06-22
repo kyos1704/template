@@ -1,24 +1,44 @@
 #include<iostream>
 #include<cstdio>
+#include<cstdlib>
+#include<climits>
+#include<cmath>
+#include<cassert>
 #include<string>
 #include<vector>
 #include<queue>
 #include<stack>
-#include<climits>
+#include<set>
+#include<map>
+#include<algorithm>
+#include<utility>
 using namespace std;
 
+
+#define INF (INT_MAX/3-10)
+
+/*
+input data
+*/
 
 void init(){
 }
 
 bool input(){
-  return false;
 }
 
 
+/*
+dp とか
+*/
+void init_solve(){
+}
 
-string solve(){
-  return "No";
+void q_input(){
+}
+
+int solve(){
+  return 0;
 }
 
 
