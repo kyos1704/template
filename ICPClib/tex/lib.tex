@@ -1,0 +1,139 @@
+\documentclass{jsarticle}
+\usepackage{listings}
+\usepackage{color}
+\lstset{%
+ language={C},
+ backgroundcolor={\color[gray]{.95}},%
+ basicstyle={\small},%
+ identifierstyle={\small},%
+ commentstyle={\small\itshape},%
+ keywordstyle={\small\bfseries},%
+ ndkeywordstyle={\small},%
+ stringstyle={\small\ttfamily},
+ frame={shadowbox},
+ breaklines=true,
+ columns=[l]{fullflexible},%
+ numbers=left,%
+ xrightmargin=0zw,%
+ xleftmargin=3zw,%
+ numberstyle={\scriptsize},%
+ stepnumber=1,
+ numbersep=1zw,%
+ lineskip=-0.5ex%
+}
+
+\begin{document}
+
+\section{全体のテンプレ}
+別にこれに固定しなくてもよい
+\begin{lstlisting}
+/*
+input data
+*/
+
+void init(){
+}
+
+bool input(){
+}
+
+
+/*
+dp とか
+*/
+void init_solve(){
+}
+
+void q_input(){
+}
+
+int solve(){
+	return 0;
+}
+
+
+int main(){
+	int m;
+	for(int i=0;i<m;i++){
+		cout<<solve()<<endl;
+	}
+}
+\end{lstlisting}
+\section{include}
+\begin{lstlisting}
+#include<cmath>
+#include<cassert>
+#include<string>
+#include<vector>
+#include<queue>
+#include<stack>
+#include<set>
+#include<map>
+#include<algorithm>
+#include<utility>
+using namespace std;
+
+\end{lstlisting}
+\clearpage
+\section{素数}
+\begin{lstlisting}
+vector<int> prime;
+vector<int> prime_list;
+void prime_set(int n){
+	n+=100;
+	prime.resize(n);
+	for(int i=0;i<n;i++){
+		prime[i]=1;
+	}
+	prime[0]=prime[1]=0;
+	for(int i=0;i*i<n;i++){
+		if(prime[i]){
+			for(int j=i*2;j<n;j+=i){
+				prime[j]=0;
+			}
+		}
+	}
+	for(int i=0;i<n;i++){
+		if(prime[i])prime_list.push_back(i);
+	}
+}
+\end{lstlisting}
+\section{文字列}
+\begin{lstlisting}
+string revStr(string s){
+    return string(s.rbegin(),s.rend());
+}
+\end{lstlisting}
+\clearpage
+\section{二次元幾何}
+\begin{lstlisting}
+#define X first
+#define Y second
+
+typedef long long ll;
+typedef pair<ll,ll> P;
+int n;
+
+int outer_product(P a,P b) {
+  return (a.X * b.Y - b.X * a.Y);
+}
+
+int inner_product(P a,P b){
+  return (a.X * b.X + a.Y *b.Y);
+}
+
+ll pow_len(P a) {
+  return a.X * a.X + a.Y * a.Y;
+}
+
+ll sqrt_len(P a){
+  return sqrt(pow_len(a));
+}
+
+P mkvec(P a,P b) {
+  return P(a.X - b.X, a.Y - b.Y);
+}
+\end{lstlisting}
+
+\end{document}
+
