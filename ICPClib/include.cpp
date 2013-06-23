@@ -7,6 +7,7 @@
 #include<map>
 #include<algorithm>
 #include<utility>
+#include<bitset>
 #include<climits>
 #include<cstdio>
 #include<cassert>
