@@ -2,7 +2,7 @@
 \usepackage{listings}
 \usepackage{color}
 \lstset{%
- language={C},
+ language={C++},
  backgroundcolor={\color[gray]{.95}},%
  basicstyle={\small},%
  identifierstyle={\small},%
@@ -48,15 +48,15 @@ void q_input(){
 }
 
 int solve(){
-	return 0;
+  return 0;
 }
 
 
 int main(){
-	int m;
-	for(int i=0;i<m;i++){
-		cout<<solve()<<endl;
-	}
+  int m;
+  for(int i=0;i<m;i++){
+    cout<<solve()<<endl;
+  }
 }
 \end{lstlisting}
 \section{include}
@@ -81,22 +81,22 @@ using namespace std;
 vector<int> prime;
 vector<int> prime_list;
 void prime_set(int n){
-	n+=100;
-	prime.resize(n);
-	for(int i=0;i<n;i++){
-		prime[i]=1;
-	}
-	prime[0]=prime[1]=0;
-	for(int i=0;i*i<n;i++){
-		if(prime[i]){
-			for(int j=i*2;j<n;j+=i){
-				prime[j]=0;
-			}
-		}
-	}
-	for(int i=0;i<n;i++){
-		if(prime[i])prime_list.push_back(i);
-	}
+  n+=100;
+  prime.resize(n);
+  for(int i=0;i<n;i++){
+    prime[i]=1;
+  }
+  prime[0]=prime[1]=0;
+  for(int i=0;i*i<n;i++){
+    if(prime[i]){
+      for(int j=i*2;j<n;j+=i){
+        prime[j]=0;
+      }
+    }
+  }
+  for(int i=0;i<n;i++){
+    if(prime[i])prime_list.push_back(i);
+  }
 }
 \end{lstlisting}
 \section{文字列}
@@ -107,6 +107,7 @@ string revStr(string s){
 \end{lstlisting}
 \clearpage
 \section{二次元幾何}
+  \begin{itemize}
 \begin{lstlisting}
 #define X first
 #define Y second
@@ -119,37 +120,49 @@ typedef pair<ll,ll> P;
 const ld INF = 1e39;
 const ld EPS = 1e-8;
 const ld  PI = acos(-1);
-
+\end{lstlisting}
+\item operator
+\begin{lstlisting}
+P operator-(P a,P b) {
+  return P(a.X - b.X, a.Y - b.Y);
+}
+\end{lstlisting}
+\item 外積
+\begin{lstlisting}
 P_type out_pro(P a,P b) {
   return (a.X * b.Y - b.X * a.Y);
 }
-
+\end{lstlisting}
+\item 内積
+\begin{lstlisting}
 P_type in_pro(P a,P b){
   return (a.X * b.X + a.Y *b.Y);
 }
+\end{lstlisting}
 
-//以下２つは小数点以下が必要なことがあるのでldにする
-ld pow_len(P a) {
+\item 長さの二乗
+\begin{lstlisting}
+P_type pow_len(P a) {
   return a.X * a.X + a.Y * a.Y;
 }
-
+\end{lstlisting}
+\item 長さ::小数点以下が必要なことがあるのでldにする
+\begin{lstlisting}
 ld len(P a){
   return sqrt(pow_len(a));
 }
-
-P make_v(P a,P b) {
-  return P(a.X - b.X, a.Y - b.Y);
-}
-//凸法
+\end{lstlisting}
+\item 凸法::依存::外積,operator-
+\begin{lstlisting}
 vector<P> convex(vector<P> list) {
   int m=0;
   vector<P> res(list.size()*2);
   sort(list.begin(),list.end());
   for(int i=0; i<list.size(); res[m++]=list[i++]){
-    for(;m>1&&out_pro(make_v(res[m-1],res[m-2]),make_v(list[i],res[m-2]))<=EPS;--m);
+    for(;m>1&&out_pro(res[m-1]-res[m-2],list[i]-res[m-2])<=EPS;--m);
   }
   for(int i=list.size()-2,r=m; i>=0; res[m++]=list[i--]){
-    for(;m>r&&out_pro(make_v(res[m-1],res[m-2]),make_v(list[i],res[m-2]))<=EPS;--m);
+    for(;m>r&&out_pro(res[m-1]-res[m-2],list[i]-res[m-2])<=EPS;--m);
   }
   res.resize(m-1);
   return res;
@@ -161,45 +174,45 @@ vector<P> convex(vector<P> list) {
 \begin{lstlisting}
 class union_find{
 private:
-	vector<int> parents;
-	vector<int> rank;
+  vector<int> parents;
+  vector<int> rank;
 public:
-	union_find(int n){
-		parents.resize(n);
-		rank.resize(n);
-	}
+  union_find(int n){
+    parents.resize(n);
+    rank.resize(n);
+  }
   void init(){
-		for(int i=0;i<parents.size();i++){
-			parents[i]=i;
-			rank[i]=0;
+    for(int i=0;i<parents.size();i++){
+      parents[i]=i;
+      rank[i]=0;
     } 
   }
-	int find(int x){
-		if(parents[x]==x){
-			return x;
-		}else{
-			return parents[x]=find(parents[x]);
-		}
-	}
-	void unite(int x,int y){
-		x=find(x);
-		y=find(y);
-		if(x==y)return;
-		if(rank[x]<rank[y]){
-			parents[x]=y;
-		}else{
-			parents[y]=x;
-			if(rank[x]==rank[y])rank[x]++;
-		}
-	}
-	bool same(int x,int y){
-		return (find(x)==find(y));
-	}
+  int find(int x){
+    if(parents[x]==x){
+      return x;
+    }else{
+      return parents[x]=find(parents[x]);
+    }
+  }
+  void unite(int x,int y){
+    x=find(x);
+    y=find(y);
+    if(x==y)return;
+    if(rank[x]<rank[y]){
+      parents[x]=y;
+    }else{
+      parents[y]=x;
+      if(rank[x]==rank[y])rank[x]++;
+    }
+  }
+  bool same(int x,int y){
+    return (find(x)==find(y));
+  }
 };
 \end{lstlisting}
 
 
-
+  \end{itemize}
 \clearpage
 \section{チェックリスト}
 \begin{enumerate}
@@ -243,7 +256,7 @@ public:
       \newline どうせ定数倍ぐらい（要確認）だから削らなくていいんじゃない？
       \item 必要な機能は列挙した？STL使える？使えないなら実装できる？
     \end{itemize}
-    \item 計算量は？
+    \item オーダーは？計算量$O(10^9)$は？配列サイズは$O(10^6)$？
     \begin{itemize}
       \item 指数とか階乗とかでてない？出てるとしたら係数大丈夫？
       \begin{itemize}
@@ -331,6 +344,12 @@ public:
       \end{itemize}
       \item フロー :::::出たら死にますごめんなさい
     \end{itemize}
+    \item 構文解析
+    \begin{itemize}
+      \item 数式
+      \item それ以外
+    \end{itemize}
+    \item データ構造系
     \item 計算
     \begin{itemize}
       \item 場合の数
