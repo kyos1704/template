@@ -13,11 +13,13 @@ public:
 	union_find(int n){
 		parents.resize(n);
 		rank.resize(n);
-		for(int i=0;i<n;i++){
+	}
+  void init(){
+		for(int i=0;i<parents.size();i++){
 			parents[i]=i;
 			rank[i]=0;
 		}
-	}
+  }
 	int find(int x){
 		if(parents[x]==x){
 			return x;

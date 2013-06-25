@@ -62,7 +62,6 @@ int main(){
 \section{include}
 \begin{lstlisting}
 #include<cmath>
-#include<cassert>
 #include<string>
 #include<vector>
 #include<queue>
@@ -71,8 +70,10 @@ int main(){
 #include<map>
 #include<algorithm>
 #include<utility>
+#include<climits>
+#include<cstdio>
+#include<cassert>
 using namespace std;
-
 \end{lstlisting}
 \clearpage
 \section{素数}
@@ -153,6 +154,47 @@ vector<P> convex(vector<P> list) {
   res.resize(m-1);
   return res;
 }
+\end{lstlisting}
+
+\section{UnionFind}
+\begin{lstlisting}
+class union_find{
+private:
+	vector<int> parents;
+	vector<int> rank;
+public:
+	union_find(int n){
+		parents.resize(n);
+		rank.resize(n);
+	}
+  void init(){
+		for(int i=0;i<parents.size();i++){
+			parents[i]=i;
+			rank[i]=0;
+    } 
+  }
+	int find(int x){
+		if(parents[x]==x){
+			return x;
+		}else{
+			return parents[x]=find(parents[x]);
+		}
+	}
+	void unite(int x,int y){
+		x=find(x);
+		y=find(y);
+		if(x==y)return;
+		if(rank[x]<rank[y]){
+			parents[x]=y;
+		}else{
+			parents[y]=x;
+			if(rank[x]==rank[y])rank[x]++;
+		}
+	}
+	bool same(int x,int y){
+		return (find(x)==find(y));
+	}
+};
 \end{lstlisting}
 
 \end{document}
