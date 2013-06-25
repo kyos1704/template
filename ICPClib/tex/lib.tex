@@ -156,6 +156,7 @@ vector<P> convex(vector<P> list) {
 }
 \end{lstlisting}
 
+\clearpage
 \section{UnionFind}
 \begin{lstlisting}
 class union_find{
@@ -197,5 +198,172 @@ public:
 };
 \end{lstlisting}
 
-\end{document}
 
+
+\clearpage
+\section{チェックリスト}
+\begin{enumerate}
+  \item 問題読む時のチェックリスト
+  \begin{itemize}
+    \item 問題のジャンルは？
+    \item 自分はそのジャンル得意？他の人が得意じゃない？
+    \item 設定ちゃんと理解してる？誰かと確認とった？
+    \begin{itemize}
+      \item 各変数の範囲は？
+      \item 何を求めるの？
+      \begin{itemize}
+        \item 求めるべきものの独自設定が問題にある？文字列とか？
+        \item 何かの値？個数？距離？
+        \item 最大？最小？
+        \item 確率？期待値？確率ならちゃんと$0\leq out\leq 1$が出力される？
+        \item 場合分け？
+      \end{itemize}
+      \item 思い込んでない？（それは問題に書いてある設定？）
+      \item その解釈以外に解釈できない？できるなら審判に質問した？
+    \end{itemize}
+  \end{itemize}
+  \clearpage
+  \item 解法考える時のチェックリスト
+  \begin{itemize}
+    \item 自分はそのジャンル得意？他の人が得意じゃない？
+    \item アルゴリズムの前提条件と問題の条件はあってる？
+    \begin{itemize}
+      \item 負の閉路とかない？
+      \item 絶対に「ほげほげ」ができるの？（ex..全域木、経路、）できないときどうするの？
+      \item 「ほげほげができない」、ケースはそれだけ？途中で変わることはない？
+      \item  一般性があることを確認した？分割されるのが二個までとか思い込んでない？
+    \end{itemize}
+    \item アルゴリズムの正当性は？常に正しい答えを出せる？
+    \begin{itemize}
+      \item 設定から読み取れるパターン全部に対応できてる？
+      \item 例外処理は存在する？対応できる？
+      \item サンプル紙の上で通した？コーナーケースサンプルにあるかもよ？
+      \item 全探索？ほんとに全探索になってる？（無意識に削ってない？）
+      \item 探索範囲削ってる？削る必要ある？削った範囲に答えは絶対にない？
+      \newline どうせ定数倍ぐらい（要確認）だから削らなくていいんじゃない？
+      \item 必要な機能は列挙した？STL使える？使えないなら実装できる？
+    \end{itemize}
+    \item 計算量は？
+    \begin{itemize}
+      \item 指数とか階乗とかでてない？出てるとしたら係数大丈夫？
+      \begin{itemize}
+        \item 組み合わせ全部とか危なそうだよ？
+      \end{itemize}
+      \item 大体$O(10^9)$以下っぽい？
+      \begin{itemize}
+        \item 典型アルゴリズムはあり本とかで調べた？勘違いしてない？
+      \end{itemize}
+      \item 逆に余裕あったりする？
+      \begin{itemize}
+        \item 簡単に実装できる方法ない？
+        \item 難しいなら考えたほうがいいよ！
+      \end{itemize}
+    \end{itemize}
+    \item 実装大丈夫そう？
+    \begin{itemize}
+      \item バグりそうなところは関数に分けれる？分ける関数の引数と、期待する返り値は紙に書いた？
+      \item バグってたら結果はどうずれる？
+      \begin{itemize}
+        \item サンプルでバグチェックできる？
+        \item サンプルにないなら、自作してチェックできるようにできない？
+      \end{itemize}
+      \item バグりそうなところは設定？
+      \item アルゴリズムが複雑？ライブラリ利用できない？使ったことある人はチームにいない？
+        \newline やったことがある人がいるならその人にその部分の実装を頼めない？
+      \item 別の実装じゃダメ？
+      \begin{itemize}
+          \item 計算量増えても、同等の効果があるならそっちのほうがいいんじゃない？
+          \item 他の部分の計算量削ってここに回せない？
+          \item 最悪$O(10^{10})$とかでも大丈夫だよ？
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+  
+  \clearpage
+  \item 実装時チェックリスト
+  \begin{itemize}
+    \item 初期化してる？
+    \item 入力の終わりは？
+    \item 出力に余計な空白とかない？
+    \item ライブラリは正しいと信じよう（タイポはチェックしても良い)コンテスト中に訂正はしない！
+      \newline ライブラリがバグってるっぽい時にはそれしかすることがないときしか修正しないこと
+    \item バグりそうなところは大丈夫？
+    \begin{itemize}
+      \item 設定の小分けのチェックは誰かに手伝ってもらった？
+      \item サンプルでチェックできる？
+      \item チェックできないパターンのサンプル作って通した？
+      \item その関数だけ分けてチェックできるならした？
+      \item 小さい機能を他の関数に分けた？
+      \item 下位関数は思ってる機能を持ってる？
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
+
+
+\clearpage
+\section{ヒント集}
+\begin{itemize}
+  \item ジャンル分け
+  \newline 他のジャンルと複合してる時もある
+  \begin{itemize}
+    \item 全探索
+    \begin{itemize}
+      \item DPできるかも？
+      \begin{itemize}
+        \item hogehogeまでなにかを詰め込む（ナップサック）
+        \item 共通資源をとりあう(スケジューリング)
+        \item 再帰的ならメモ化できる
+        \item その他、間に合わないならがんばれ
+      \end{itemize}
+      \item もしかして：：：：：：：：貪欲（できれば避けたい）
+    \end{itemize}
+    \item グラフ
+    \begin{itemize}
+      \item 最短経路
+      \begin{itemize}
+        \item 全点（ワーシャルフロイド）
+        \item 始点終点（ダイクストラ、ベルマンフォード(負の閉路)）
+      \end{itemize}
+      \item 全域木
+      \begin{itemize}
+        \item クラスカル、プリム
+      \end{itemize}
+      \item フロー :::::出たら死にますごめんなさい
+    \end{itemize}
+    \item 計算
+    \begin{itemize}
+      \item 場合の数
+      \begin{itemize}
+        \item 数え上げ
+        \item 確率
+        \item 期待値
+      \end{itemize}
+      \item 素数とか、定義の実装がある
+      \begin{itemize}
+        \item エラトステネスの篩
+          \newline こいつ（亜種含む）で先にテーブル作っちゃえたり
+      \end{itemize}
+    \end{itemize}
+    \item ゲーム
+    \begin{itemize}
+      \item 分割統治とか
+      \item シミュレーション？サイコロ、文中で設定されてる
+      \item Nimに帰着？まだよくわかってない
+    \end{itemize}
+    \item 幾何
+      \newline 多分他のジャンルと複合してる グラフに落としたりするかも
+    \begin{itemize}
+      \item 二次元
+      \item 三次元
+    \end{itemize}
+    \begin{itemize}
+      \item 線
+      \item 円
+      \item 図の方程式..計算カテゴリに放り込めるかも
+      \item 交差
+      \item 凸包（すべてを包むほげほげ）
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{document}
