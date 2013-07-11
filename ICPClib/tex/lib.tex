@@ -61,6 +61,8 @@ int main(){
 \end{lstlisting}
 \section{include}
 \begin{lstlisting}
+#include<iostream>
+#include<iomanip>
 #include<cmath>
 #include<string>
 #include<vector>
@@ -70,6 +72,7 @@ int main(){
 #include<map>
 #include<algorithm>
 #include<utility>
+#include<bitset>
 #include<climits>
 #include<cstdio>
 #include<cassert>
@@ -109,13 +112,10 @@ string revStr(string s){
 \section{二次元幾何}
   \begin{itemize}
 \begin{lstlisting}
-#define X first
-#define Y second
-
 typedef long double ld;
 typedef long long ll;
-typedef ll P_type;
-typedef pair<ll,ll> P;
+typedef ld P_type;
+typedef complex<P_type> P;
 
 const ld INF = 1e39;
 const ld EPS = 1e-8;
@@ -123,8 +123,14 @@ const ld  PI = acos(-1);
 \end{lstlisting}
 \item operator
 \begin{lstlisting}
-P operator-(P a,P b) {
-  return P(a.X - b.X, a.Y - b.Y);
+namespace std{
+  bool operator<(P a, P b) {
+    if(a.X!=b.X){
+      return a.X < b.X;
+    }else{
+      return a.Y < b.Y;
+    }
+  }
 }
 \end{lstlisting}
 \item 外積
@@ -295,7 +301,8 @@ public:
   \clearpage
   \item 実装時チェックリスト
   \begin{itemize}
-    \item 初期化してる？
+    \item 初期化してる？INF?0?-1?
+    \item operatorは正しい？priority queueは注意！
     \item 入力の終わりは？
     \item 出力に余計な空白とかない？
     \item ライブラリは正しいと信じよう（タイポはチェックしても良い)コンテスト中に訂正はしない！
