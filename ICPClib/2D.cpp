@@ -1,22 +1,29 @@
+#include<complex>
 #include<algorithm>
 #include<vector>
 #include<utility>
 #include<cmath>
 using namespace std;
-#define X first
-#define Y second
+#define X real()
+#define Y imag()
 
 typedef long double ld;
 typedef long long ll;
-typedef ll P_type;
-typedef pair<ll,ll> P;
+typedef ld P_type;
+typedef complex<P_type> P;
 
 const ld INF = 1e39;
 const ld EPS = 1e-8;
 const ld  PI = acos(-1);
 
-P operator-(P a,P b) {
-  return P(a.X - b.X, a.Y - b.Y);
+namespace std{
+  bool operator<(P a, P b) {
+    if(a.X!=b.X){
+      return a.X < b.X;
+    }else{
+      return a.Y < b.Y;
+    }
+  }
 }
 
 P_type out_pro(P a,P b) {
@@ -51,5 +58,4 @@ vector<P> convex(vector<P> list) {
   return res;
 }
  
-
 int main(){}
