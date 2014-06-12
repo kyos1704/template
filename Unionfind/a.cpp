@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<vector>
 using namespace std;
-#define MAX_N 100
 
 class union_find{
 private:
