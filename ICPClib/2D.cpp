@@ -9,6 +9,10 @@ typedef complex<double> P;
 #define X real()
 #define Y imag()
 
+#define Curr(P,i) P[(i)%P.size()]
+#define Next(P,i) P[(i+1)%P.size()]
+#define Prev(P,i) P[(i+P.size()-1)%P.size()]
+
 namespace std{
   bool operator<(const P a,const P b){
     return a.X != b.X ? a.X < b.X : a.Y < b.Y;
@@ -57,6 +61,7 @@ P reflection(L a,P p){
 
 
 
+
 //交差判定
 //TODO CP(内包) CL CS (0)
 bool isCrossLL(L a,L b){
@@ -83,13 +88,6 @@ bool isCrossSS(S a,S b){
 bool isCrossSP(S a,P p){
   return abs(a[0]-p)+abs(a[1]-p)-abs(a[0]-a[1]) < EPS;
 }
-bool isCrossCC(C a,C b){
-  //接してる時は交差
-  return abs(a.p-b.p)-(a.r+b.r) <= EPS;
-}
-bool isCrossCP(C a,P p){
-  return abs(a.p-p)-a.r<=EPS;
-}
 
 
 // 距離 CP CL CS は(distXP(x,c.p)-c.r)
@@ -107,7 +105,7 @@ double distLS(L a,S b){
 }
 double distSP(S a,P p){
   const P r = projection(a,p);
-  return isCrossSP(a,r) ? 0 : min(abs(a[0]-p),abs(a[1]-p));
+  return isCrossSP(a,r) ? abs(p-r) : min(abs(a[0]-p),abs(a[1]-p));
 }
 double distSS(S a,S b){
   return isCrossSS(a,b)?0:
@@ -117,10 +115,26 @@ double distSS(S a,S b){
     );
 }
 
+//円の交差判定
+bool isCrossCP(C a,P p){
+  return abs(a.p-p)-a.r<=EPS;
+}
+bool isCrossCL(C a,L l){
+  return distLP(l,a.p)-a.r<EPS;
+}
+double distSP_MAX(S a,P p){
+  return max(abs(a[0]-p),abs(a[1]-p));
+}
+bool isCrossCS(C a,S s){
+  return distSP(s,a.p)-a.r<EPS&&distSP_MAX(s,a.p)-a.r>EPS;
+}
+bool isCrossCC(C a,C b){//接してる時は交差
+  return abs(a.p-b.p)-(a.r+b.r) <= EPS;
+}
+
 
 //交差点
 //先に交差判定をすること
-//CL
 P crossP_LL(L a,L b){
   double A = cross(a[1]-a[0],b[1]-b[0]);
   double B = cross(a[1]-a[0],a[1]-b[0]);
@@ -128,14 +142,22 @@ P crossP_LL(L a,L b){
   if(abs(A)<EPS)assert(false);
   return b[0]+B/A*(b[1]-b[0]);
 }
-pair<P,P> crossP_CC(C a,C b){
+vector<P> crossP_CL(C c,L l){
+  P tmp = projection(l,c.p);
+  P e = (l[0]-l[1])/abs(l[0]-l[1]);
+  double h = abs(c.p-tmp)*abs(c.p-tmp);
+  double t = sqrt(c.r*c.r - h*h);
+  if(t<EPS)return {tmp};
+  return {tmp + e*t,tmp - e*t};
+}
+vector<P> crossP_CC(C a,C b){
   P A = conj(a.p-b.p);
   P B = (b.r*b.r - a.r*a.r - (b.p-a.p)*conj(b.p-a.p));
   P C = a.r*a.r*(a.p-b.p);
   P D = B*B-4.0*A*C;
   P z1 = (-B+sqrt(D))/(2.0*A)+a.p;
   P z2 = (-B+sqrt(D))/(2.0*A)+b.p;
-  return make_pair(z1,z2);
+  return {z1,z2};
 }
 
 
@@ -164,18 +186,13 @@ G convex_hull(G ps){
 
 
 //凸性判定
-#define Curr(P,i) P[(i)%P.size()]
-#define Next(P,i) P[(i+1)%P.size()]
-#define Prev(P,i) P[(i+P.size()-1)%P.size()]
 bool isConvex(G g){
   for(int i=0; i<g.size();i++){
     if(ccw(Prev(g,i),Curr(g,i),Next(g,i))>0)return false;
   }
 }
 
-void printP(P a){
-  cout<<"("<<a.X<<","<<a.Y<<")";
-}
+
 
 //接線
 //TODO check
@@ -226,20 +243,5 @@ vector<L> TLine_CC(C a,C b){
 
 
 
-
 int main(){
-  double x,y,r;
-  cout<<"x y r"<<endl;
-  cin>>x>>y>>r;
-  C c1(P(x,y),r);
-  cout<<"x y"<<endl;
-  cin>>x>>y>>r;
-  C c2(P(x,y),r);
-  auto tmp = TLine_CC(c1,c2);
-  //cin>>x>>y;
-  //P p(x,y);
-  //auto tmp = TLine_CP(c1,p);
-  for(auto i:tmp){
-    printP(i[0]);printP(i[1]);cout<<endl;
-  }
 }
