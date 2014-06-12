@@ -86,21 +86,24 @@ bool isCrossSP(S a,P p){
 
 
 // 距離 CP CL CS は(distXP(x,c.p)-c.r)
+double distPP(P a,P b){
+  return abs(a-b);
+}
 double distLP(L a,P p){
   return abs(p-projection(a,p));
 }
 double distLL(L a,L b){
-  return crossLL(a,b) ? 0 : distLP(a,b[0]);
+  return isCrossLL(a,b) ? 0 : distLP(a,b[0]);
 }
 double distLS(L a,S b){
-  return crossLS(a,b) ? 0 : min(distLP(a,b[0]),distLP(a,b[1]));
+  return isCrossLS(a,b) ? 0 : min(distLP(a,b[0]),distLP(a,b[1]));
 }
 double distSP(S a,P p){
   const P r = projection(a,p);
-  return crossSP(a,r) ? 0 : min(abs(a[0]-p),abs(a[1]-p));
+  return isCrossSP(a,r) ? 0 : min(abs(a[0]-p),abs(a[1]-p));
 }
 double distSS(S a,S b){
-  return crossSS(a,b)?0:
+  return isCrossSS(a,b)?0:
     min(
       min(distSP(a,b[0]),distSP(a,b[0])),
       min(distSP(a,b[0]),distSP(a,b[0]))
@@ -128,8 +131,6 @@ pair<P,P> crossP_CC(C a,C b){
   return make_pair(z1,z2);
 }
 
-//接線
-//TODO CP CC (10)
 
 
 //三点->円
@@ -165,6 +166,36 @@ bool isConvex(G g){
   }
 }
 
+//接線
+//TODO check
+//TODO CP CC (10)
+pair<L,L> TLine_CP(C c,P p){
+  P v = c.p - p;
+  double t = asin(abs(c.r)/(abs(v)));
+  P e = v * exp(P(.0,t));
+  P n = sqrt(c.r*c.r+abs(v)*abs(v))/(abs(v))*e;
+  return make_pair(L(p,n),L(p,reflection(L(p,c.p),n)));
+}
 
 
-int main(){}
+
+
+void printP(P a){
+  cout<<"("<<a.X<<","<<a.Y<<")";
+}
+
+int main(){
+  int x,y,r;
+  cout<<"x y r"<<endl;
+  cin>>x>>y>>r;
+  C c(P(x,y),r);
+  cout<<"x y"<<endl;
+  cin>>x>>y;
+  P p(x,y);
+  pair<L,L> tmp = TLine_CP(c,p);
+  L a = tmp.first;
+  L b = tmp.second;
+
+  cout<<"first  ";printP(a[0]);printP(a[1]);cout<<endl;
+  cout<<"second ";printP(b[0]);printP(b[1]);cout<<endl;
+}
