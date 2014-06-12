@@ -126,7 +126,7 @@ double distSP_MAX(S a,P p){
   return max(abs(a[0]-p),abs(a[1]-p));
 }
 bool isCrossCS(C a,S s){
-  return distSP(s,a.p)-a.r<EPS&&distSP_MAX(s,a.p)-a.r>EPS;
+  return distSP(s,a.p)-a.r<-EPS&&distSP_MAX(s,a.p)-a.r>+EPS;
 }
 bool isCrossCC(C a,C b){//接してる時は交差
   return abs(a.p-b.p)-(a.r+b.r) <= EPS;
@@ -240,8 +240,5 @@ vector<L> TLine_CC(C a,C b){
   }
   return res;
 }
-
-
-
 int main(){
 }
