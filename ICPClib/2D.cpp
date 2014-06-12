@@ -52,7 +52,7 @@ P projection(L a,P p){
   return a[0] + t*(a[0]-a[1]);
 }
 P reflection(L a,P p){
-  return p + 2.0 * (projection(a,p));
+  return p + 2.0 * (projection(a,p)-p);
 }
 
 
@@ -82,6 +82,13 @@ bool isCrossSS(S a,S b){
 }
 bool isCrossSP(S a,P p){
   return abs(a[0]-p)+abs(a[1]-p)-abs(a[0]-a[1]) < EPS;
+}
+bool isCrossCC(C a,C b){
+  //接してる時は交差
+  return abs(a.p-b.p)-(a.r+b.r) <= EPS;
+}
+bool isCrossCP(C a,P p){
+  return abs(a.p-p)-a.r<=EPS;
 }
 
 
@@ -166,36 +173,73 @@ bool isConvex(G g){
   }
 }
 
-//接線
-//TODO check
-//TODO CP CC (10)
-pair<L,L> TLine_CP(C c,P p){
-  P v = c.p - p;
-  double t = asin(abs(c.r)/(abs(v)));
-  P e = v * exp(P(.0,t));
-  P n = sqrt(c.r*c.r+abs(v)*abs(v))/(abs(v))*e;
-  return make_pair(L(p,n),L(p,reflection(L(p,c.p),n)));
-}
-
-
-
-
 void printP(P a){
   cout<<"("<<a.X<<","<<a.Y<<")";
 }
 
+//接線
+//TODO check
+vector<L> TLine_CP(C c,P p){
+  P v = c.p - p;
+  double t = asin(abs(c.r)/(abs(v)));
+  P e = v/abs(v) * exp(P(.0,t));
+  P n1 = sqrt(abs(v)*abs(v) - c.r*c.r)*e + p;
+  P n2 = reflection(L(p,c.p),n1);
+  return {L(p,n1),L(p,n2)};
+}
+
+// TLine CC
+vector<L> TLine_CPr(C c,P p,double r){
+  P v = c.p - p;
+  double t = asin(abs(c.r)/(abs(v)));
+  P e = v/abs(v) * exp(P(.0,t));
+  P n1 = sqrt(abs(v)*abs(v) - c.r*c.r)*e + p;
+  P e1 = (n1-c.p)/abs(n1-c.p) * r;
+  P n2 = reflection(L(p,c.p),n1);
+  P e2 = (n2-c.p)/abs(n2-c.p) * r;
+  return {L(p+e1,n1+e1),L(p+e2,n2+e2)};
+}
+vector<L> TLine_CC(C a,C b){
+  //接してる時がヤバイ
+  vector<L> res;
+  if(!isCrossCC(a,b)&&(abs(a.r)>EPS)&&(abs(b.r>EPS))){
+    P tmp = (a.p-b.p)*(b.r)/(a.r+b.r) + b.p;
+    auto t1 = TLine_CP(a,tmp);
+    auto t2 = TLine_CP(b,tmp);
+    res.push_back(L(t1[0][1],t2[0][1]));
+    res.push_back(L(t1[1][1],t2[1][1]));
+  }
+  if(abs(a.r-b.r)<EPS){
+    const auto r = a.r;
+    P e = (a.p-b.p)/abs(a.p-b.p) * exp(P(.0,90.0/180.0*M_PI));
+    res.push_back(L(a.p+(e*r),b.p+(e*r)));
+    if(abs(r)>=EPS)res.push_back(L(a.p-(e*r),b.p-(e*r)));
+  }else{
+    if(a.r<b.r)swap(a,b);
+    auto t3 = TLine_CPr(C(a.p,a.r-b.r),b.p,b.r);
+    for(auto i:t3){
+      res.push_back(i);
+    }
+  }
+  return res;
+}
+
+
+
+
 int main(){
-  int x,y,r;
+  double x,y,r;
   cout<<"x y r"<<endl;
   cin>>x>>y>>r;
-  C c(P(x,y),r);
+  C c1(P(x,y),r);
   cout<<"x y"<<endl;
-  cin>>x>>y;
-  P p(x,y);
-  pair<L,L> tmp = TLine_CP(c,p);
-  L a = tmp.first;
-  L b = tmp.second;
-
-  cout<<"first  ";printP(a[0]);printP(a[1]);cout<<endl;
-  cout<<"second ";printP(b[0]);printP(b[1]);cout<<endl;
+  cin>>x>>y>>r;
+  C c2(P(x,y),r);
+  auto tmp = TLine_CC(c1,c2);
+  //cin>>x>>y;
+  //P p(x,y);
+  //auto tmp = TLine_CP(c1,p);
+  for(auto i:tmp){
+    printP(i[0]);printP(i[1]);cout<<endl;
+  }
 }
