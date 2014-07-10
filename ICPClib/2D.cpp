@@ -80,10 +80,10 @@ bool isCrossLP(L l,P p){
 bool isCrossSS(S a,S b){
   return
     ccw(a[0],a[1],b[0])
-    * ccw(a[0],a[1],b[0]) <= 0
+    * ccw(a[0],a[1],b[1]) <= 0
     &&
     ccw(b[0],b[1],a[0])
-    * ccw(b[0],b[1],a[0]) <= 0;
+    * ccw(b[0],b[1],a[1]) <= 0;
 }
 bool isCrossSP(S a,P p){
   return abs(a[0]-p)+abs(a[1]-p)-abs(a[0]-a[1]) < EPS;
@@ -110,8 +110,8 @@ double distSP(S a,P p){
 double distSS(S a,S b){
   return isCrossSS(a,b)?0:
     min(
-      min(distSP(a,b[0]),distSP(a,b[0])),
-      min(distSP(a,b[0]),distSP(a,b[0]))
+      min(distSP(a,b[0]),distSP(a,b[1])),
+      min(distSP(b,a[0]),distSP(b,a[1]))
     );
 }
 
