@@ -240,5 +240,13 @@ vector<L> TLine_CC(C a,C b){
   }
   return res;
 }
+
+
+
+//原点を起点とした回転
+P rotate(P a,double r){
+  return a*exp(P(0.0,r*M_PI/180.0));
+}
+
 int main(){
 }
